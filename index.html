@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Les webSoket Live Test Rig</title>
+    <style>
+      body {
+        font-family: "Courier New", Courier, monospace;
+        padding: 20px;
+        background: #121212;
+        color: #fff;
+        #log {
+          background: #1e1e1e;
+          padding: 10px;
+          height: 300px;
+          overflow-y: scroll;
+          border: 1px solid #333;
+          margin-bottom: 20px;
+        }
+        .status-on {
+          color: #00ff00;
+        }
+        .status-off {
+          color: #ff0000;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>WebSockets Live Test Rig</h1>
+    <p id="status" class="status-off">Connecting....</p>
+    <form id="messageForm">
+      <input type="text" id="messageInput" placeholder="Type your message here" />
+      <button type="submit">Send</button>
+    </form>
+    <h3>Live Stream Logs: </h3>
+    <pre id="log"></pre>
+    <script>
+      const statusEl = document.getElementById("status");
+      const logEl = document.getElementById("log");
+      const messageForm = document.getElementById("messageForm");
+      const messageInput = document.getElementById("messageInput");
+//1. Initialte the Handshake
+      const ws = new WebSocket("ws://localhost:8080"); 
+
+      ws.onopen = () => {
+        statusEl.textContent = "Connected";
+        statusEl.className = "status-on";
+        logEl.textContent += "Connected to server\n";
+      };
+
+      ws.onmessage = (event) => {
+        logEl.textContent += `Server: ${event.data}\n`;
+        logEl.scrollTop = logEl.scrollHeight;
+      };
+
+      ws.onclose = () => {
+        statusEl.textContent = "Disconnected";
+        statusEl.className = "status-off";
+        logEl.textContent += "Disconnected from server\n";
+      };
+
+      messageForm.onsubmit = (e) => {
+        e.preventDefault();
+        const message = messageInput.value;
+        ws.send(message);
+        logEl.textContent += `You: ${message}\n`;
+        messageInput.value = "";
+        logEl.scrollTop = logEl.scrollHeight;
+      };
+
+    </script>
+  </body>
+</html>
