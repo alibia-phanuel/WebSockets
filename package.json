@@ -19,10 +19,14 @@
   },
   "homepage": "https://github.com/alibia-phanuel/WebSockets#readme",
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.45.1",
     "express": "^5.2.1",
     "ws": "^8.19.0"
   },
   "devDependencies": {
-    "@types/ws": "^8.18.1"
+    "@types/ws": "^8.18.1",
+    "drizzle-kit": "^0.31.8"
   }
 }
